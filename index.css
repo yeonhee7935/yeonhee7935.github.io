@@ -20,6 +20,41 @@
   --font-sans:
     -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
   --header-height: 72px;
+
+  /* Hero theme tokens (default: blue, overridden by .theme-orange) */
+  --hero-primary: #007aff;
+  --hero-primary-hover: #0071e3;
+  --hero-orb1-color: rgba(0, 122, 255, 0.18);
+  --hero-orb2-color: rgba(94, 92, 230, 0.15);
+  --hero-glow-shadow: rgba(0, 122, 255, 0.15);
+  --hero-glow-box: rgba(0, 113, 227, 0.2);
+  --hero-cursor-color: %23007aff;
+}
+
+/* ==========================================================================
+   Hero Section Themes
+   ========================================================================== */
+
+/* Blue theme (default – 정연희.jpg) */
+.intro-section.theme-blue {
+  --hero-primary: #007aff;
+  --hero-primary-hover: #0071e3;
+  --hero-orb1-color: rgba(0, 122, 255, 0.18);
+  --hero-orb2-color: rgba(94, 92, 230, 0.15);
+  --hero-glow-shadow: rgba(0, 122, 255, 0.15);
+  --hero-glow-box: rgba(0, 113, 227, 0.2);
+  --hero-cursor-color: %23007aff;
+}
+
+/* Orange theme (정연희2.jpg) */
+.intro-section.theme-orange {
+  --hero-primary: #ff6b2b;
+  --hero-primary-hover: #e85a1f;
+  --hero-orb1-color: rgba(255, 107, 43, 0.16);
+  --hero-orb2-color: rgba(255, 160, 60, 0.12);
+  --hero-glow-shadow: rgba(255, 107, 43, 0.15);
+  --hero-glow-box: rgba(232, 90, 31, 0.22);
+  --hero-cursor-color: %23ff6b2b;
 }
 
 /* ==========================================================================
@@ -96,6 +131,12 @@ ol {
    ========================================================================== */
 .text-blue {
   color: var(--color-primary);
+}
+
+/* Inside hero section, override to use hero theme primary */
+.intro-section .text-blue {
+  color: var(--hero-primary);
+  transition: color 0.5s ease;
 }
 
 /* ==========================================================================
@@ -321,7 +362,7 @@ section {
 .orb-1 {
   width: 450px;
   height: 450px;
-  background: radial-gradient(circle, rgba(0, 122, 255, 0.18) 0%, rgba(0, 122, 255, 0) 70%);
+  background: radial-gradient(circle, var(--hero-orb1-color) 0%, transparent 70%);
   top: -50px;
   left: 10%;
   animation: float-orb-1 25s ease-in-out infinite alternate;
@@ -330,7 +371,7 @@ section {
 .orb-2 {
   width: 550px;
   height: 550px;
-  background: radial-gradient(circle, rgba(94, 92, 230, 0.15) 0%, rgba(94, 92, 230, 0) 70%);
+  background: radial-gradient(circle, var(--hero-orb2-color) 0%, transparent 70%);
   bottom: -100px;
   right: 5%;
   animation: float-orb-2 30s ease-in-out infinite alternate;
@@ -459,9 +500,9 @@ section {
 }
 
 .quick-nav-btn:hover {
-  background-color: var(--color-primary);
+  background-color: var(--hero-primary);
   color: #ffffff;
-  box-shadow: 0 4px 12px rgba(0, 113, 227, 0.2);
+  box-shadow: 0 4px 12px var(--hero-glow-box);
 }
 
 /* Radial expand positions on wrapper hover */
@@ -495,8 +536,8 @@ section {
 .avatar-wrapper:hover .avatar-container,
 .avatar-wrapper:focus-within .avatar-container {
   transform: scale(1.08);
-  box-shadow: 0 0 0 3px #ffffff, 0 12px 30px rgba(0, 122, 255, 0.15);
-  /* Premium Apple static blue glow */
+  box-shadow: 0 0 0 3px #ffffff, 0 12px 30px var(--hero-glow-shadow);
+  /* Premium Apple static glow */
 }
 
 .hero-content {
@@ -571,20 +612,20 @@ section {
 }
 
 .hero-btn.btn-cv {
-  background-color: var(--color-primary);
+  background-color: var(--hero-primary);
   color: var(--color-white);
-  border-color: var(--color-primary);
-  box-shadow: 0 4px 12px rgba(0, 122, 255, 0.15);
+  border-color: var(--hero-primary);
+  box-shadow: 0 4px 12px var(--hero-glow-shadow);
 }
 
 .hero-btn.btn-cv:hover {
-  background-color: var(--color-primary-hover);
-  border-color: var(--color-primary-hover);
-  box-shadow: 0 6px 16px rgba(0, 122, 255, 0.25);
+  background-color: var(--hero-primary-hover);
+  border-color: var(--hero-primary-hover);
+  box-shadow: 0 6px 16px var(--hero-glow-box);
 }
 
 .hero-btn.btn-cv:active {
-  background-color: var(--color-primary-hover);
+  background-color: var(--hero-primary-hover);
 }
 
 /* Scroll Indicator (Desktop Only) */
@@ -605,7 +646,7 @@ section {
 }
 
 .hero-scroll-indicator:hover {
-  color: var(--color-primary);
+  color: var(--hero-primary);
 }
 
 .hero-scroll-indicator.indicator-initial-hide {
@@ -637,7 +678,7 @@ section {
   display: inline-block;
   width: 2px;
   height: 1.15em;
-  background-color: var(--color-primary);
+  background-color: var(--hero-primary);
   margin-left: 4px;
   vertical-align: -3px;
   animation: cursor-blink 0.8s steps(2, start) infinite;
