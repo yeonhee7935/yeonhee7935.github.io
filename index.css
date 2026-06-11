@@ -920,8 +920,8 @@ section {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  margin-top: 24px;
-  margin-bottom: 24px;
+  margin-top: 0;
+  margin-bottom: 20px;
 }
 
 .tech-badge {
@@ -945,14 +945,14 @@ section {
 .project-body {
   display: flex;
   flex-direction: column;
-  gap: 28px;
+  gap: 20px;
   width: 100%;
 }
 
 .project-block {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 8px;
 }
 
 /* Refined Typography Hierarchy: Block titles styled as clean labels */
@@ -962,13 +962,13 @@ section {
   color: var(--color-text-muted);
   letter-spacing: 0.8px;
   text-transform: uppercase;
-  margin-bottom: 4px;
+  margin-bottom: 0;
 }
 
 .process-list {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 16px;
 }
 
 /* Clean, non-overlapping detail list hierarchy */
@@ -978,13 +978,13 @@ section {
   color: var(--color-text-main);
   display: inline-block;
   vertical-align: middle;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
 }
 
 .process-list li p {
   font-size: 14px;
   color: var(--color-text-body);
-  margin-bottom: 6px;
+  margin-bottom: 0;
   line-height: 1.6;
 }
 
@@ -1482,9 +1482,9 @@ section {
   }
 
   .project-team-meta {
-    padding: 0 0 12px 0;
+    padding: 0;
     margin-bottom: 20px;
-    gap: 10px;
+    gap: 8px;
   }
 
   .team-meta-item {
@@ -1502,7 +1502,7 @@ section {
   }
 
   .process-list li {
-    margin-bottom: 16px;
+    margin-bottom: 0;
   }
 
   .process-list li strong {
@@ -1781,7 +1781,7 @@ section {
 }
 
 .process-list li {
-  margin-bottom: 24px;
+  margin-bottom: 0;
 }
 
 .process-list li strong {
@@ -1794,26 +1794,28 @@ section {
 .project-team-meta {
   background-color: transparent;
   border-radius: 0;
-  padding: 0 0 16px 0;
-  margin-bottom: 24px;
+  padding: 0;
+  margin-bottom: 20px;
   display: flex;
   flex-direction: column;
   gap: 8px;
   border: none;
-  border-bottom: 1px solid rgba(229, 232, 235, 0.8);
   box-shadow: none;
 }
 
 .team-meta-item {
   display: flex;
-  font-size: 13.5px;
+  align-items: baseline;
+  font-size: 13px;
   line-height: 1.5;
 }
 
 .meta-label {
+  font-size: 12px;
   font-weight: 600;
   color: var(--color-text-muted);
-  /* Adjusted for visual hierarchy */
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
   width: 90px;
   flex-shrink: 0;
 }
@@ -1821,6 +1823,7 @@ section {
 .meta-val {
   color: var(--color-text-main);
   font-weight: 500;
+  font-size: 13px;
 }
 
 .contribution-badge {
