@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+  initRandomProfileImage();
   initAccordionExclusiveBehavior();
   initScrollSpy();
   initImageViewer();
@@ -354,6 +355,58 @@ function initTypewriter() {
 
   // Delay typing startup slightly for user focus
   setTimeout(type, 400);
+}
+
+/**
+ * 8. Random Profile Image Selector
+ * Randomly selects one of the profile images on page load and updates all profile images on the page.
+ * Also applies a matching theme class to the hero section:
+ *   - assets/profile-blue.jpg  → theme-blue  (파란색 테마)
+ *   - assets/profile-orange.jpg → theme-orange (주황색 테마)
+ */
+function initRandomProfileImage() {
+  const profiles = [
+    { src: 'assets/profile-blue.jpg',   favicon: 'assets/favicon-blue.png',   theme: 'theme-blue',   cursorColor: '%23007aff' },
+    { src: 'assets/profile-orange.jpg', favicon: 'assets/favicon-orange.png', theme: 'theme-orange', cursorColor: '%23ff6b2b' },
+  ];
+  const randomIndex = Math.floor(Math.random() * profiles.length);
+  const { src: selectedImage, favicon: selectedFavicon, theme: selectedTheme, cursorColor } = profiles[randomIndex];
+
+  // Swap favicon to match selected theme
+  const faviconLink = document.querySelector('link[rel="icon"]');
+  if (faviconLink) {
+    faviconLink.href = selectedFavicon;
+  }
+
+  // Apply theme to hero section
+  const introSection = document.getElementById('intro');
+  if (introSection) {
+    introSection.classList.remove('theme-blue', 'theme-orange');
+    introSection.classList.add(selectedTheme);
+  }
+
+  // Update cursor color globally to match theme
+  const cursorSvgAuto = `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='46' height='46' viewBox='0 0 24 24' fill='${cursorColor}'><path d='M5.5 3.21v15.58l3.89-3.89h6.81z' stroke='white' stroke-width='1.5' stroke-linejoin='round'/></svg>"), auto`;
+  const cursorSvgPointer = `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='46' height='46' viewBox='0 0 24 24' fill='${cursorColor}'><path d='M5.5 3.21v15.58l3.89-3.89h6.81z' stroke='white' stroke-width='1.5' stroke-linejoin='round'/></svg>"), pointer`;
+
+  document.body.style.cursor = cursorSvgAuto;
+
+  const pointerEls = document.querySelectorAll('a, button, details, summary, .btn, .nav-link, .project-summary');
+  pointerEls.forEach(el => {
+    el.style.cursor = cursorSvgPointer;
+  });
+
+  // Update hero avatar
+  const avatarImg = document.querySelector('.avatar-img');
+  if (avatarImg) {
+    avatarImg.src = selectedImage;
+  }
+
+  // Update chat avatars
+  const chatAvatars = document.querySelectorAll('.chat-avatar-img');
+  chatAvatars.forEach(img => {
+    img.src = selectedImage;
+  });
 }
 
 /**
