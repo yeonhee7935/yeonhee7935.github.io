@@ -1,64 +1,9 @@
-<!doctype html>
-<html lang="ko">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>정연희 | 프론트엔드 개발자 포트폴리오</title>
-    <meta
-      name="description"
-      content="프론트엔드 개발자 정연희의 포트폴리오입니다."
-    />
-    <link rel="stylesheet" href="index.css" />
-    <link rel="icon" type="image/png" href="assets/favicon.png" />
-    <!-- Pretendard Web Font -->
-    <link
-      rel="stylesheet"
-      as="style"
-      crossorigin
-      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css"
-    />
-    <noscript>
-      <style>
-        .avatar-wrapper.avatar-initial-hide {
-          opacity: 1 !important;
-          transform: none !important;
-          pointer-events: auto !important;
-        }
-        .hero-scroll-indicator.indicator-initial-hide {
-          opacity: 1 !important;
-          transform: none !important;
-          pointer-events: auto !important;
-        }
-        .hero-links.links-initial-hide {
-          opacity: 1 !important;
-          transform: none !important;
-          pointer-events: auto !important;
-        }
-      </style>
-    </noscript>
-  </head>
+---
+layout: default
+title: 정연희 | 프론트엔드 개발자 포트폴리오
+description: 프론트엔드 개발자 정연희의 포트폴리오입니다.
+---
 
-  <body>
-    <!-- Header Section -->
-    <header class="main-header" id="main-header">
-      <div class="header-container">
-        <a href="#" class="header-logo">정연희</a>
-        <nav class="header-nav" id="header-nav">
-          <ul>
-            <li><a href="#about" class="nav-link">소개</a></li>
-            <li><a href="#career" class="nav-link">경력</a></li>
-            <li><a href="#projects" class="nav-link">프로젝트</a></li>
-            <li><a href="#education" class="nav-link">교육</a></li>
-            <li>
-              <span class="nav-link disabled" title="추후 서비스 준비 중입니다."
-                >블로그<span class="badge">준비 중</span></span
-              >
-            </li>
-          </ul>
-        </nav>
-      </div>
-    </header>
 
     <!-- Hero Section -->
     <section id="intro" class="intro-section text-center">
@@ -1131,20 +1076,4 @@
       </div>
     </section>
 
-    <!-- Footer Section -->
-    <footer class="main-footer">
-      <div class="container">
-        <p class="copyright">&copy; 2026 Jeong Yeonhee</p>
-      </div>
-    </footer>
 
-    <!-- Image Viewer Modal -->
-    <div id="image-viewer-modal" class="image-viewer-modal">
-      <span class="close-viewer">&times;</span>
-      <img class="viewer-content" id="viewer-img" alt="확대된 이미지" />
-      <div id="viewer-caption" class="viewer-caption"></div>
-    </div>
-
-    <script src="index.js"></script>
-  </body>
-</html>

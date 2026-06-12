@@ -51,60 +51,17 @@ function initAccordionExclusiveBehavior() {
 
 /**
  * 2. Scroll Spy (Active nav link highlighting based on current view segment)
- * Tracks the scroll position and adds 'active' class to header links corresponding
- * to the section currently visible in viewport.
- * If the user scrolls to the absolute bottom of the page, it automatically activates 
- * the last section (Education) even if its height is low.
+ * Since header navigation is simplified to high-level tabs (Portfolio, Blog),
+ * standard scroll spy highlighting is bypassed to keep the page tab highlighted correctly.
  */
 function initScrollSpy() {
-  const sections = document.querySelectorAll('section[id]');
-  const navLinks = document.querySelectorAll('.header-nav .nav-link:not(.disabled)');
-  const header = document.getElementById('main-header');
-  const headerHeight = header ? header.offsetHeight : 72;
-
-  function spy() {
-    let currentSectionId = 'intro'; // Default section
-    const scrollPosition = window.scrollY + headerHeight + 100; // Add offsets
-
-    // 1. Check if the user has reached the absolute bottom of the document
-    const isAtBottom = (window.innerHeight + window.scrollY) >= (document.documentElement.scrollHeight - 15);
-
-    if (isAtBottom && sections.length > 0) {
-      // If at the bottom, force the last section (Education) to be active
-      currentSectionId = sections[sections.length - 1].getAttribute('id');
-    } else {
-      // Standard intersection checking
-      sections.forEach((section) => {
-        const sectionTop = section.offsetTop;
-        const sectionHeight = section.offsetHeight;
-
-        if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
-          currentSectionId = section.getAttribute('id');
-        }
-      });
-    }
-
-    // Update nav links active states
-    navLinks.forEach((link) => {
-      link.classList.remove('active');
-      const href = link.getAttribute('href');
-      if (href === `#${currentSectionId}`) {
-        link.classList.add('active');
-      }
-    });
-  }
-
-  // Bind scroll and resize events
-  window.addEventListener('scroll', spy);
-  window.addEventListener('resize', spy);
-  
-  // Initial run on load
-  spy();
+  // Bypassed for simplified header navigation.
+  return;
 }
 
 /**
  * 3. Image Viewer Modal (Lightbox effect)
- * Allows clicking on project mockup images to view them in a larger modal overlay.
+ * Allows clicking on project mockup images or blog article images to view them in a larger modal overlay.
  */
 function initImageViewer() {
   const modal = document.getElementById('image-viewer-modal');
@@ -114,8 +71,8 @@ function initImageViewer() {
 
   if (!modal || !modalImg) return;
 
-  // Find all project images
-  const images = document.querySelectorAll('.project-image');
+  // Find all project images and blog article images
+  const images = document.querySelectorAll('.project-image, .blog-article-content img');
 
   images.forEach(img => {
     img.style.cursor = 'zoom-in';
@@ -360,23 +317,18 @@ function initTypewriter() {
 /**
  * 8. Random Profile Image Selector
  * Randomly selects one of the profile images on page load and updates all profile images on the page.
- * Also applies a matching theme class to the hero section:
- *   - assets/profile-blue.jpg  → theme-blue  (파란색 테마)
- *   - assets/profile-orange.jpg → theme-orange (주황색 테마)
+/**
+ * 8. Profile Image & Theme Initializer
+ * Sets the default profile image and applies the matching blue theme globally.
  */
 function initRandomProfileImage() {
-  const profiles = [
-    { src: 'assets/profile-blue.jpg',   favicon: 'assets/favicon-blue.png',   theme: 'theme-blue',   cursorColor: '%23007aff' },
-    { src: 'assets/profile-orange.jpg', favicon: 'assets/favicon-orange.png', theme: 'theme-orange', cursorColor: '%23ff6b2b' },
-  ];
-  const randomIndex = Math.floor(Math.random() * profiles.length);
-  const { src: selectedImage, favicon: selectedFavicon, theme: selectedTheme, cursorColor } = profiles[randomIndex];
+  const selectedImage = 'assets/profile-blue.jpg';
+  const selectedTheme = 'theme-blue';
+  const cursorColor = '%23007aff';
 
-  // Swap favicon to match selected theme
-  const faviconLink = document.querySelector('link[rel="icon"]');
-  if (faviconLink) {
-    faviconLink.href = selectedFavicon;
-  }
+  // Apply theme to body globally for styling dynamic components
+  document.body.classList.remove('theme-blue', 'theme-orange');
+  document.body.classList.add(selectedTheme);
 
   // Apply theme to hero section
   const introSection = document.getElementById('intro');

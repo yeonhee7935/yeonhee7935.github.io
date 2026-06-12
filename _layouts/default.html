@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>{{ page.title | default: "정연희 | 프론트엔드 개발자 포트폴리오" }}</title>
+    <meta
+      name="description"
+      content="{{ page.description | default: '프론트엔드 개발자 정연희의 포트폴리오 및 블로그입니다.' }}"
+    />
+    <link rel="stylesheet" href="{{ '/index.css' | relative_url }}" />
+    <link rel="icon" type="image/png" href="{{ '/assets/favicon-blue.png' | relative_url }}" />
+    <!-- Pretendard Web Font -->
+    <link
+      rel="stylesheet"
+      as="style"
+      crossorigin
+      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css"
+    />
+    <noscript>
+      <style>
+        .avatar-wrapper.avatar-initial-hide {
+          opacity: 1 !important;
+          transform: none !important;
+          pointer-events: auto !important;
+        }
+        .hero-scroll-indicator.indicator-initial-hide {
+          opacity: 1 !important;
+          transform: none !important;
+          pointer-events: auto !important;
+        }
+        .hero-links.links-initial-hide {
+          opacity: 1 !important;
+          transform: none !important;
+          pointer-events: auto !important;
+        }
+      </style>
+    </noscript>
+  </head>
+
+  <body class="{% if page.url contains '/blog' %}blog-layout{% endif %}">
+    <div class="site-wrapper">
+      <!-- Header Section -->
+      <header class="main-header" id="main-header">
+        <div class="header-container">
+          <a href="{{ '/' | relative_url }}" class="header-logo">정연희</a>
+          <nav class="header-nav" id="header-nav">
+            <ul>
+              <li><a href="{{ '/' | relative_url }}" class="nav-link{% if page.url == '/' or page.url == '/index.html' %} active{% endif %}" id="nav-portfolio">포트폴리오</a></li>
+              <li><a href="{{ '/blog/' | relative_url }}" class="nav-link{% if page.url contains '/blog' %} active{% endif %}" id="nav-blog">블로그</a></li>
+            </ul>
+          </nav>
+        </div>
+      </header>
+
+      <div class="site-content">
+        {{ content }}
+      </div>
+
+    <!-- Footer Section -->
+    <footer class="main-footer">
+      <div class="container footer-container">
+        <div class="footer-grid">
+          <!-- Column 1: Brand & Intro -->
+          <div class="footer-column footer-brand">
+            <h4 class="footer-header">Frontend Developer</h4>
+            <div class="footer-brand-name">정연희</div>
+          </div>
+          <!-- Column 2: Contact -->
+          <div class="footer-column">
+            <h4 class="footer-header">Contact</h4>
+            <ul class="footer-links">
+              <li>
+                <a href="mailto:jyhee7935@naver.com" class="footer-contact-link">
+                  <svg class="footer-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                    <polyline points="22,6 12,13 2,6"></polyline>
+                  </svg>
+                  <span>jyhee7935@naver.com</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+          <!-- Column 3: Links -->
+          <div class="footer-column">
+            <h4 class="footer-header">Links</h4>
+            <ul class="footer-links">
+              <li>
+                <a href="https://github.com/yeonhee7935" target="_blank" rel="noopener noreferrer" class="footer-social-link">
+                  <svg class="footer-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                  </svg>
+                  <span>GitHub</span>
+                </a>
+              </li>
+              <li>
+                <a href="{{ '/assets/resume.pdf' | relative_url }}" download class="footer-download-link">
+                  <svg class="footer-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="7 10 12 15 17 10"></polyline>
+                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                  </svg>
+                  <span>PDF 이력서 다운로드</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </footer>
+  </div>
+
+  <!-- Image Viewer Modal -->
+    <div id="image-viewer-modal" class="image-viewer-modal">
+      <span class="close-viewer">&times;</span>
+      <img class="viewer-content" id="viewer-img" alt="확대된 이미지" />
+      <div id="viewer-caption" class="viewer-caption"></div>
+    </div>
+
+    <script src="{{ '/index.js' | relative_url }}"></script>
+  </body>
+</html>

@@ -1,0 +1,39 @@
+---
+layout: default
+title: 블로그 목록 | 정연희
+permalink: /blog/
+---
+
+<main class="container">
+  <div class="blog-header-section">
+    <h1 class="blog-main-title">정연희 기술 블로그</h1>
+    <p class="blog-main-subtitle">개발하며 배우고 느낀 점들을 기록하는 공간입니다.</p>
+  </div>
+
+  <div class="blog-posts-list">
+    {% for post in site.posts %}
+    <article class="blog-post-item">
+      <a href="{{ post.url | relative_url }}" class="blog-item-link">
+        <div class="blog-item-content">
+          <div class="blog-item-left">
+            <div class="blog-item-category">{{ post.category }}</div>
+            <h2 class="blog-item-title">{{ post.title }}</h2>
+            <p class="blog-item-excerpt">{{ post.excerpt | strip_html | truncate: 160 }}</p>
+            <div class="blog-item-meta">
+              <span class="blog-item-date">{{ post.date | date: "%Y. %m. %d" }}</span>
+              <span class="blog-item-readtime">{{ post.readtime }}</span>
+            </div>
+          </div>
+          {% if post.thumbnail %}
+          <div class="blog-item-right">
+            <img src="{{ post.thumbnail | relative_url }}" class="blog-item-thumbnail" alt="{{ post.title }}" />
+          </div>
+          {% endif %}
+        </div>
+      </a>
+    </article>
+    {% else %}
+    <p class="blog-no-posts">아직 등록된 포스트가 없습니다.</p>
+    {% endfor %}
+  </div>
+</main>
