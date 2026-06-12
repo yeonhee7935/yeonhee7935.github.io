@@ -2877,3 +2877,162 @@ body.blog-layout .main-header {
     max-width: 100%;
   }
 }
+
+/* --- Kramdown Markdown Table Layout Fixes --- */
+.blog-article-content table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14.5px;
+  text-align: left;
+  margin: 32px 0;
+  border-radius: 14px;
+  border: 1px solid var(--color-border);
+  overflow: hidden;
+}
+
+.blog-article-content th {
+  background-color: #f5f5f7;
+  font-weight: 600;
+  color: var(--color-text-main);
+  padding: 14px 18px;
+  border-bottom: 1.5px solid var(--color-border);
+  font-size: 14px;
+}
+
+.blog-article-content td {
+  padding: 16px 18px;
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text-body);
+  line-height: 1.6;
+}
+
+.blog-article-content tr:last-child td {
+  border-bottom: none;
+}
+
+.blog-article-content tr:hover {
+  background-color: #fbfbfd;
+}
+
+@media (max-width: 768px) {
+  .blog-article-content table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* --- Reusable Glossary Popup System (Toss Glassmorphism) --- */
+.glossary-term {
+  border-bottom: 1px dashed var(--color-primary);
+  color: var(--color-text-main);
+  cursor: help;
+  font-weight: 600;
+  padding-bottom: 1px;
+  transition: color 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+  border-radius: 4px;
+  padding-left: 2px;
+  padding-right: 2px;
+}
+
+.glossary-term:hover {
+  color: var(--color-primary);
+  border-bottom-color: transparent;
+  background-color: rgba(49, 130, 246, 0.08);
+}
+
+.glossary-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 2000;
+  transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glossary-modal.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.glossary-modal-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.glossary-modal-content {
+  position: relative;
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 24px;
+  padding: 28px;
+  width: 440px;
+  max-width: 90%;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08);
+  transform: scale(0.94);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  z-index: 2001;
+}
+
+.glossary-modal.active .glossary-modal-content {
+  transform: scale(1);
+}
+
+.glossary-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  padding-bottom: 12px;
+}
+
+.glossary-modal-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--color-text-main);
+  margin: 0;
+}
+
+.glossary-modal-close {
+  background: none;
+  border: none;
+  font-size: 28px;
+  font-weight: 300;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  padding: 0 4px;
+  line-height: 1;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.glossary-modal-close:hover {
+  color: var(--color-text-main);
+  transform: scale(1.1);
+}
+
+.glossary-modal-body {
+  line-height: 1.6;
+}
+
+.glossary-modal-description {
+  font-size: 15px;
+  color: var(--color-text-body);
+  margin: 0;
+  line-height: 1.68;
+}

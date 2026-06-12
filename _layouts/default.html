@@ -112,11 +112,25 @@
     </footer>
   </div>
 
-  <!-- Image Viewer Modal -->
+    <!-- Image Viewer Modal -->
     <div id="image-viewer-modal" class="image-viewer-modal">
       <span class="close-viewer">&times;</span>
       <img class="viewer-content" id="viewer-img" alt="확대된 이미지" />
       <div id="viewer-caption" class="viewer-caption"></div>
+    </div>
+
+    <!-- Glossary Modal -->
+    <div id="glossary-modal" class="glossary-modal" aria-hidden="true" role="dialog" aria-labelledby="glossary-title">
+      <div class="glossary-modal-overlay"></div>
+      <div class="glossary-modal-content">
+        <div class="glossary-modal-header">
+          <h4 id="glossary-title" class="glossary-modal-title">용어 사전</h4>
+          <button type="button" class="glossary-modal-close" id="glossary-modal-close" aria-label="용어 사전 닫기">&times;</button>
+        </div>
+        <div class="glossary-modal-body">
+          <p id="glossary-description" class="glossary-modal-description"></p>
+        </div>
+      </div>
     </div>
 
     <script src="{{ '/index.js' | relative_url }}"></script>

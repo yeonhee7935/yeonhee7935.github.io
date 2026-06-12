@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initHeroGlowAnimation();
   initTypewriter();
   initSmoothScrolling();
+  initGlossaryModal();
 });
 
 /**
@@ -343,7 +344,7 @@ function initRandomProfileImage() {
 
   document.body.style.cursor = cursorSvgAuto;
 
-  const pointerEls = document.querySelectorAll('a, button, details, summary, .btn, .nav-link, .project-summary');
+  const pointerEls = document.querySelectorAll('a, button, details, summary, .btn, .nav-link, .project-summary, .glossary-term');
   pointerEls.forEach(el => {
     el.style.cursor = cursorSvgPointer;
   });
@@ -387,6 +388,83 @@ function initSmoothScrolling() {
         behavior: 'smooth'
       });
     });
+  });
+}
+
+const GLOSSARY_DB = {
+  'NAT': 'NAT(Network Address Translation, 네트워크 주소 변환)는 공인 IP 주소 하나를 여러 개의 사설 IP 주소로 변환하여 사용하는 네트워크 기술입니다. 공유기 등이 사설 네트워크 내의 여러 기기들에게 사설 IP를 부여하고 외부 인터넷 연결 시 하나의 공인 IP로 변환하여 트래픽을 처리하는 원리입니다.',
+  'Firewall': '방화벽(Firewall)은 미리 정의된 보안 규칙에 기초하여 사설망 또는 사설망으로 들어오고 나가는 네트워크 트래픽을 모니터링하고 제어하는 네트워크 보안 시스템입니다. 신뢰성 없는 외부 세력의 침입이나 악성 패킷을 차단하는 역할을 합니다.',
+  'Stream': '스트림(Stream)은 실시간 통신 환경에서 시간에 따라 흐르는 연속적인 미디어(비디오, 오디오) 또는 일반 데이터 패킷들의 디지털 흐름입니다. WebRTC에서는 카메라와 마이크 트랙을 묶은 MediaStream을 통해 전송을 제어합니다.',
+  'Signaling': '시그널링(Signaling)은 두 브라우저가 직접적인 P2P 연결을 생성하기 전에, 연결에 필요한 서로의 주소 후보군, 통신을 수행할 미디어 해상도 및 코덱 등의 제어 정보(SDP)를 중계 서버를 거쳐 상호 교환하는 사전 협상 과정입니다.',
+  'SDP': 'SDP(Session Description Protocol, 세션 기술 프로토콜)는 WebRTC가 연결되기 전에 미디어 포맷, 오디오/비디오 코덱, 해상도, 프로토콜 및 네트워크 연결 정보 등을 정형화된 텍스트 서식으로 기술한 규격입니다. 시그널링 과정을 통해 양 피어가 SDP를 교환합니다.',
+  'ICE': 'ICE(Interactive Connectivity Establishment, 대화형 연결 설립)는 사설 IP와 방화벽이 존재하는 환경에서 최적의 P2P 통신 경로를 수집하고 동적으로 선택하여 연결을 맺어주는 표준 네트워크 조율 프레임워크입니다.',
+  'STUN': 'STUN(Session Traversal Utilities for NAT)은 사설 IP 환경 뒤의 기기가 자신의 외부 공인 IP 주소와 포트 번호를 파악할 수 있도록 중계해 주는 네트워크 도구이자 경량 프로토콜입니다.',
+  'TURN': 'TURN(Traversal Using Relays around NAT)은 방화벽 규칙이 지나치게 엄격하거나 양 기기가 모두 대칭형 NAT 환경 뒤에 위치하여 직접적인 P2P 홀펀칭이 완전히 불가능할 때, 서버가 직접 미디어와 데이터를 릴레이(중계)하는 최후의 통신 우회 수단입니다.'
+};
+
+/**
+ * 9. Reusable Glossary Popup System (Toss Glassmorphism)
+ * Dynamically binds click event handlers to all elements with '.glossary-term' class.
+ * Reads term metadata from data-term attribute, retrieves definition from GLOSSARY_DB,
+ * and opens the Toss/iOS-style blur modal.
+ */
+function initGlossaryModal() {
+  const modal = document.getElementById('glossary-modal');
+  const titleEl = document.getElementById('glossary-title');
+  const descEl = document.getElementById('glossary-description');
+  const closeBtn = document.getElementById('glossary-modal-close');
+  
+  if (!modal || !descEl || !titleEl) return;
+
+  const terms = document.querySelectorAll('.glossary-term');
+  
+  terms.forEach(term => {
+    const key = term.getAttribute('data-term');
+    if (!key || !GLOSSARY_DB[key]) return;
+
+    term.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      // Update modal content
+      titleEl.textContent = key;
+      descEl.textContent = GLOSSARY_DB[key];
+
+      // Show modal with smooth transition
+      modal.classList.add('active');
+      modal.setAttribute('aria-hidden', 'false');
+
+      // Prevent body scrolling
+      document.body.style.overflow = 'hidden';
+    });
+  });
+
+  function closeGlossary() {
+    modal.classList.remove('active');
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+
+  // Close on close button click
+  if (closeBtn) {
+    closeBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      closeGlossary();
+    });
+  }
+
+  // Close when clicking overlay (outside the content card)
+  modal.addEventListener('click', (e) => {
+    if (e.target.classList.contains('glossary-modal-overlay') || e.target === modal) {
+      closeGlossary();
+    }
+  });
+
+  // Close when pressing Esc key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal.classList.contains('active')) {
+      closeGlossary();
+    }
   });
 }
 
