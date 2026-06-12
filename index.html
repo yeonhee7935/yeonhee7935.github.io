@@ -1,64 +1,9 @@
-<!doctype html>
-<html lang="ko">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>정연희 | 프론트엔드 개발자 포트폴리오</title>
-    <meta
-      name="description"
-      content="프론트엔드 개발자 정연희의 포트폴리오입니다."
-    />
-    <link rel="stylesheet" href="index.css" />
-    <link rel="icon" type="image/png" href="assets/favicon.png" />
-    <!-- Pretendard Web Font -->
-    <link
-      rel="stylesheet"
-      as="style"
-      crossorigin
-      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css"
-    />
-    <noscript>
-      <style>
-        .avatar-wrapper.avatar-initial-hide {
-          opacity: 1 !important;
-          transform: none !important;
-          pointer-events: auto !important;
-        }
-        .hero-scroll-indicator.indicator-initial-hide {
-          opacity: 1 !important;
-          transform: none !important;
-          pointer-events: auto !important;
-        }
-        .hero-links.links-initial-hide {
-          opacity: 1 !important;
-          transform: none !important;
-          pointer-events: auto !important;
-        }
-      </style>
-    </noscript>
-  </head>
+---
+layout: default
+title: 정연희 | 프론트엔드 개발자 포트폴리오
+description: 프론트엔드 개발자 정연희의 포트폴리오입니다.
+---
 
-  <body>
-    <!-- Header Section -->
-    <header class="main-header" id="main-header">
-      <div class="header-container">
-        <a href="#" class="header-logo">정연희</a>
-        <nav class="header-nav" id="header-nav">
-          <ul>
-            <li><a href="#about" class="nav-link">소개</a></li>
-            <li><a href="#career" class="nav-link">경력</a></li>
-            <li><a href="#projects" class="nav-link">프로젝트</a></li>
-            <li><a href="#education" class="nav-link">교육</a></li>
-            <li>
-              <span class="nav-link disabled" title="추후 서비스 준비 중입니다."
-                >블로그<span class="badge">준비 중</span></span
-              >
-            </li>
-          </ul>
-        </nav>
-      </div>
-    </header>
 
     <!-- Hero Section -->
     <section id="intro" class="intro-section text-center">
@@ -567,12 +512,13 @@
                         <span class="project-tag tag-frontend">Frontend</span>
                         <strong>초기 로딩 성능 최적화</strong>
                         <p>
-                          페이지 기능이 늘어나면서 첫 화면이 열리는 데 4초 이상
-                          걸리는 문제가 발생했습니다. 이를 해결하기 위해 Webpack
-                          코드 스플리팅과 브라우저 캐싱을 적용하고, 정적
-                          이미지와 폰트 파일을 압축한 뒤 WebP, WOFF2 확장자로
-                          변환하여 번들 크기를 70% 줄였습니다. 결과적으로 첫
-                          로딩 시간을 0.5초로 단축시켜 사용성을 개선했습니다.
+                          페이지 기능이 늘어나면서 첫 화면이 로드되는 데 3.8초 이상
+                          걸리는 문제가 발생했습니다. Webpack 빌드 경고를 유발하는
+                          JS 번들 크기를 줄이기 위해 페이지 단위 코드 분할(Code Splitting)을
+                          도입하고 사용하지 않는 라이브러리를 정리하여 번들 크기를 약 80% 줄였습니다.
+                          이와 더불어 폰트와 이미지의 포맷을 WOFF2, WebP로 변경하고
+                          미사용 이미지를 삭제하여 정적 에셋 로딩을 개선했습니다. 결과적으로 첫 화면
+                          렌더링 시간(LCP)을 1.6초로 단축시켜 사용성을 개선했습니다.
                         </p>
                       </li>
                       <li
@@ -636,8 +582,8 @@
                     <h4 class="block-title">성과</h4>
                     <ul class="achievement-list">
                       <li>
-                        초기 번들 사이즈 약 70% 감소 및 주요 페이지 로딩 속도
-                        단축 (4초 → 0.5초)
+                        초기 번들 사이즈 약 80% 감소 및 주요 페이지 로딩 속도
+                        단축 (3.8초 → 1.6초)
                       </li>
                       <li>
                         배포 리드 타임 단축 (15분 → 2분) 및 수동 배포 장애 감축
@@ -1131,20 +1077,4 @@
       </div>
     </section>
 
-    <!-- Footer Section -->
-    <footer class="main-footer">
-      <div class="container">
-        <p class="copyright">&copy; 2026 Jeong Yeonhee</p>
-      </div>
-    </footer>
 
-    <!-- Image Viewer Modal -->
-    <div id="image-viewer-modal" class="image-viewer-modal">
-      <span class="close-viewer">&times;</span>
-      <img class="viewer-content" id="viewer-img" alt="확대된 이미지" />
-      <div id="viewer-caption" class="viewer-caption"></div>
-    </div>
-
-    <script src="index.js"></script>
-  </body>
-</html>
