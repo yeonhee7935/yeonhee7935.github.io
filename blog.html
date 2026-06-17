@@ -6,8 +6,8 @@ permalink: /blog/
 
 <main class="container">
   <div class="blog-header-section">
-    <h1 class="blog-main-title">정연희 기술 블로그</h1>
-    <p class="blog-main-subtitle">개발하며 배우고 느낀 점들을 기록하는 공간입니다.</p>
+    <h1 class="blog-main-title">블로그</h1>
+    <p class="blog-main-subtitle">개발 일지와 소소한 기록들</p>
   </div>
 
   <div class="blog-posts-list">
@@ -18,13 +18,20 @@ permalink: /blog/
           <div class="blog-item-left">
             <div class="blog-item-categories">
               {% for category in post.categories %}
-              <span class="blog-item-category tag-{{ category | downcase }}">{% if category == 'etc' %}ETC{% else %}{{ category | capitalize }}{% endif %}</span>
+              <span class="blog-item-category tag-{{ category | downcase }}"
+                >{% if category == 'etc' %}ETC{% else %}{{ category | capitalize
+                }}{% endif %}</span
+              >
               {% endfor %}
             </div>
             <h2 class="blog-item-title">{{ post.title }}</h2>
-            <p class="blog-item-excerpt">{{ post.excerpt | strip_html | truncate: 160 }}</p>
+            <p class="blog-item-excerpt">
+              {{ post.excerpt | strip_html | truncate: 160 }}
+            </p>
             <div class="blog-item-meta">
-              <span class="blog-item-date">{{ post.date | date: "%Y. %m. %d" }}</span>
+              <span class="blog-item-date"
+                >{{ post.date | date: "%Y. %m. %d" }}</span
+              >
               <span class="blog-item-readtime">{{ post.readtime }}</span>
             </div>
           </div>
