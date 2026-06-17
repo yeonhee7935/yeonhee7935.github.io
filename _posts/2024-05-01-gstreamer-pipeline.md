@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "GStreamer와 WebRTC를 활용한 실시간 영상 스트리밍 파이프라인 구축"
-category: WEB
+categories: [backend]
 date: 2024-05-01 10:00:00 +0900
 readtime: "6 min read"
 thumbnail: assets/project-webrtc.png

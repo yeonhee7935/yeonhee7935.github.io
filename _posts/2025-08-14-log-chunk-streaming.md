@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "대용량 파일 스트리밍 다운로드 구현기"
-category: PERFORMANCE
+categories: [frontend, backend]
 date: 2025-08-14 10:00:00 +0900
 readtime: "6 min read"
 thumbnail: assets/project-fms.jpg

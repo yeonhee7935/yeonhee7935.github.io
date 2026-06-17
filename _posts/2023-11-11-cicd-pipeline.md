@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "수동 배포 장애 월 5건에서 1건으로: Docker와 Self-hosted Runner 기반 CI/CD 자동화 구축기"
-category: PROCESS
+categories: [etc]
 date: 2023-11-11 10:00:00 +0900
 readtime: "6 min read"
 thumbnail: assets/project-fms.jpg

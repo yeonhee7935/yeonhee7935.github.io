@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "웹 개발자를 위한 비디오 스트리밍 기초"
-category: WEB
+categories: [frontend, backend]
 date: 2024-07-15 10:00:00 +0900
 readtime: "5 min read"
 thumbnail: assets/project-webrtc.png

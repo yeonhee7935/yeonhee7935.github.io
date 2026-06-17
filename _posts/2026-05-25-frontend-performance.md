@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "번들 사이즈 줄이기: 초기 로딩 속도 개선을 위한 첫걸음"
-category: PERFORMANCE
+categories: [frontend]
 date: 2026-05-25 10:00:00 +0900
 readtime: "5 min read"
 thumbnail: assets/project-fms.jpg

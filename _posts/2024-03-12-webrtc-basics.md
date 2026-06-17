@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "웹 브라우저로 실시간 통신하기: WebRTC의 핵심 개념과 동작 원리"
-category: WEB
+categories: [frontend]
 date: 2024-03-12 10:00:00 +0900
 readtime: "6 min read"
 thumbnail: assets/project-webrtc.png

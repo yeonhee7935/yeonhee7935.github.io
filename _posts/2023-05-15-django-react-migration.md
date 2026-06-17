@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Django Template에서 React/TypeScript로의 점진적 마이그레이션 전략"
-category: ARCHITECTURE
+categories: [frontend, backend]
 date: 2023-05-15 10:00:00 +0900
 readtime: "6 min read"
 thumbnail: assets/project-fms.jpg

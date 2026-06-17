@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "차량 상태 모니터링을 위한 Socket.io 도입기"
-category: ARCHITECTURE
+categories: [frontend, backend]
 date: 2025-01-10 09:00:00 +0900
 readtime: "5 min read"
 thumbnail: assets/project-fms.jpg

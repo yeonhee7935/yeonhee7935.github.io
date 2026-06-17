@@ -16,7 +16,11 @@ permalink: /blog/
       <a href="{{ post.url | relative_url }}" class="blog-item-link">
         <div class="blog-item-content">
           <div class="blog-item-left">
-            <div class="blog-item-category">{{ post.category }}</div>
+            <div class="blog-item-categories">
+              {% for category in post.categories %}
+              <span class="blog-item-category tag-{{ category | downcase }}">{% if category == 'etc' %}ETC{% else %}{{ category | capitalize }}{% endif %}</span>
+              {% endfor %}
+            </div>
             <h2 class="blog-item-title">{{ post.title }}</h2>
             <p class="blog-item-excerpt">{{ post.excerpt | strip_html | truncate: 160 }}</p>
             <div class="blog-item-meta">

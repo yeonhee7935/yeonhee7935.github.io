@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "유한 상태 머신(FSM) 도입으로 복잡한 분기 조건문(IF-ELSE) 청소하기"
-category: ARCHITECTURE
+categories: [frontend]
 date: 2025-05-05 10:00:00 +0900
 readtime: "6 min read"
 thumbnail: assets/project-fms.jpg
