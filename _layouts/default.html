@@ -5,10 +5,63 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>{{ page.title | default: "정연희 | 프론트엔드 개발자 포트폴리오" }}</title>
-    <meta
-      name="description"
-      content="{{ page.description | default: '프론트엔드 개발자 정연희의 포트폴리오 및 블로그입니다.' }}"
-    />
+    {% assign meta_description = page.description | default: page.excerpt | strip_html | strip_newlines | truncate: 160 %}
+    {% if meta_description == "" or meta_description == nil %}
+      {% assign meta_description = "프론트엔드 개발자 정연희의 포트폴리오 및 블로그입니다." %}
+    {% endif %}
+    <meta name="description" content="{{ meta_description }}" />
+    <meta name="robots" content="index, follow" />
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="{{ page.url | absolute_url }}" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="{% if page.layout == 'post' %}article{% else %}website{% endif %}" />
+    <meta property="og:url" content="{{ page.url | absolute_url }}" />
+    <meta property="og:title" content="{{ page.title | default: '정연희 | 프론트엔드 개발자 포트폴리오' }}" />
+    <meta property="og:description" content="{{ meta_description }}" />
+    <meta property="og:image" content="{% if page.thumbnail %}{{ page.thumbnail | absolute_url }}{% else %}{{ '/assets/og-image.png' | absolute_url }}{% endif %}" />
+    <meta property="og:site_name" content="정연희 포트폴리오" />
+    <meta property="og:locale" content="ko_KR" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="{{ page.url | absolute_url }}" />
+    <meta property="twitter:title" content="{{ page.title | default: '정연희 | 프론트엔드 개발자 포트폴리오' }}" />
+    <meta property="twitter:description" content="{{ meta_description }}" />
+    <meta property="twitter:image" content="{% if page.thumbnail %}{{ page.thumbnail | absolute_url }}{% else %}{{ '/assets/og-image.png' | absolute_url }}{% endif %}" />
+
+    <!-- JSON-LD Structured Data -->
+    {% if page.layout == 'post' %}
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      "headline": {{ page.title | jsonify }},
+      "image": [
+        {% if page.thumbnail %}{{ page.thumbnail | absolute_url | jsonify }}{% else %}{{ '/assets/og-image.png' | absolute_url | jsonify }}{% endif %}
+      ],
+      "datePublished": {{ page.date | date_to_xmlschema | jsonify }},
+      "dateModified": {{ page.date | date_to_xmlschema | jsonify }},
+      "author": [{
+          "@type": "Person",
+          "name": "정연희",
+          "url": {{ '/' | absolute_url | jsonify }}
+        }],
+      "description": {{ meta_description | jsonify }}
+    }
+    </script>
+    {% else %}
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "정연희 포트폴리오",
+      "url": {{ '/' | absolute_url | jsonify }},
+      "description": "프론트엔드 개발자 정연희의 포트폴리오 및 기술 블로그입니다."
+    }
+    </script>
+    {% endif %}
     <link rel="stylesheet" href="{{ '/index.css' | relative_url }}" />
     <link rel="icon" type="image/png" href="{{ '/assets/favicon-blue.png' | relative_url }}" />
     <!-- Pretendard Web Font -->
