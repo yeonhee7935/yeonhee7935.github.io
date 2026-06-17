@@ -2443,10 +2443,9 @@ body.blog-layout .main-header {
   align-items: center;
   font-size: 10px;
   font-weight: 600;
-  padding: 3px 8px;
+  padding: 4px 10px;
   border-radius: 6px;
   letter-spacing: 0.3px;
-  text-transform: uppercase;
   transition: background-color 0.2s ease, color 0.2s ease;
   line-height: 1;
 }
@@ -2584,10 +2583,9 @@ body.blog-layout .main-header {
   align-items: center;
   font-size: 10px;
   font-weight: 600;
-  padding: 3px 8px;
+  padding: 4px 10px;
   border-radius: 6px;
   letter-spacing: 0.3px;
-  text-transform: uppercase;
   line-height: 1;
 }
 
