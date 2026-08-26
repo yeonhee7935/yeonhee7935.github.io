@@ -1,70 +1,57 @@
 ---
 layout: post
-title: "유한 상태 머신(FSM) 도입으로 복잡한 분기 조건문(IF-ELSE) 청소하기"
+title: "충전 트레일러 절차 다변화에 대응하는 API 규약 기반 FE 아키텍처 개편"
 categories: [frontend]
 date: 2025-05-05 10:00:00 +0900
 readtime: "6 min read"
 thumbnail: assets/project-fms.jpg
-excerpt: "차량 종류와 예약 상태에 따라 복잡하게 얽히던 관제 화면의 동작 분기 코드를 상태 머신(FSM) 구조로 해결한 사례를 공유합니다."
+excerpt: "자율/원격/수동 주행 방식 및 충전사별로 복잡해지는 화면 분기 로직을 백엔드와의 API 인덱스 규약 제안으로 깔끔하게 디커플링한 경험을 공유합니다."
 ---
 
-프로젝트를 진행하며 화면 기획서에 "이 상태일 때는 이 버튼이 노출되고 클릭 시 이 동작을 해야 한다"와 같은 조건들이 점점 채워지다 보면, 프론트엔드 코드 내부는 이를 분기하기 위한 복잡한 Boolean 플래그와 조건문으로 뒤덮이기 쉽습니다.
+프로젝트를 진행하며 화면 기획서에 "이 상태일 때는 이 버튼이 노출되고 클릭 시 이 동작을 해야 한다"와 같은 비즈니스 조건이 계속 늘어나다 보면, 프론트엔드 코드 내부는 이를 제어하기 위한 복잡한 Boolean 플래그와 조건문으로 뒤덮이기 쉽습니다.
 
-특히 **전기차 충전용 트레일러 예약 및 관제 시스템**을 개발할 당시, 관리자 화면에서 이 문제가 가장 심각했습니다. 예약 상태에 따라 오퍼레이터가 수행해야 하는 액션의 종류, 화면상 버튼 명칭, 그리고 클릭 시 API 호출 규칙이 전부 제각각이었기 때문입니다.
+특히 **전기차 충전용 트레일러 관제 시스템**을 개발할 당시 이 문제가 가장 심각했습니다. 관제 화면의 대상 트레일러가 **자율주행**, **원격주행**, **수동주행**인지에 따라 거쳐야 하는 절차가 제각각이었고, 연동된 **충전기**의 통신 규격에 따라서도 오퍼레이터가 수행해야 하는 액션의 종류와 버튼 명칭이 달랐기 때문입니다.
 
-처음에는 단순한 if-else문으로 이 상태를 제어했지만, 서비스 대상 차량 모델이 늘어남에 따라 조건문 분기가 걷잡을 수 없이 꼬이는 위기를 마주했습니다. 이를 극복하기 위해 **유한 상태 머신(FSM, Finite State Machine)**의 개념을 도입해 스파게티 코드를 깔끔하게 리팩토링한 경험을 소개합니다.
+처음에는 단순한 if-else 조건문으로 프론트엔드에서 이를 처리하려 했지만, 규격이 늘어날 때마다 컴포넌트 코드가 비대해지고 버그가 급증했습니다. 이를 극복하기 위해 **백엔드 팀에 상태 및 액션 인덱스 규약을 제안**하여 프론트엔드의 비즈니스 로직 의존성을 완전히 제거한 경험을 소개합니다.
 
 ---
 
-### 문제 상황: 차종 증가와 예약 단계의 파편화
+### 문제 상황: 주행 방식과 충전사에 따른 렌더링/액션 파편화
 
-관제 화면의 각 예약 카드에는 상태에 따라 오퍼레이터가 눌러야 하는 액션 버튼들이 노출되어야 했습니다. 문제는 **연결할 차량의 종류에 따라 거쳐야 하는 예약의 라이프사이클(단계)이 세부적으로 달랐다**는 점이었습니다.
+관제 화면의 각 트레일러 카드에는 현재 상태에 따라 오퍼레이터가 눌러야 하는 액션 버튼들이 노출되어야 했습니다. 문제는 트레일러의 주행 방식과 충전기 규격에 따라 거쳐야 하는 작업 흐름(Workflow)이 완전히 달랐습니다.
 
-- **예약 모델 A (예: 사전 검사 필수 차량)**: `대기(Pending)` &rarr; `사전검사 신청(Pre-checked)` &rarr; `트레일러 배정(Assigned)` &rarr; `이동 중` &rarr; `충전 중`
-- **예약 모델 B (예: 즉시 배정 차량)**: `대기(Pending)` &rarr; `트레일러 배정(Assigned)` &rarr; `이동 중` &rarr; `충전 중` (사전 검사 생략 가능)
-- **예약 모델 C**: 특정 안전 센서 부착을 먼저 승인받아야 배정 단계로 갈 수 있는 특수 차량 흐름
-  등
-  <br/>
-  이러한 비즈니스 조건들을 화면 컴포넌트 내부에 단순 조건문으로 녹여내다 보니 다음과 같은 스파게티 코드가 탄생했습니다.
+- **자율주행 트레일러 + A 충전사**: `대기` &rarr; `자율주행 출발` &rarr; `자동 커넥터 연결` &rarr; `충전 시작`
+- **수동주행 트레일러 + B 충전사**: `대기` &rarr; `오퍼레이터 수동 이동` &rarr; `충전사 회원 인증` &rarr; `충전 시작`
+- **원격주행 트레일러 + C 충전사**: `대기` &rarr; `원격 제어 터널 연결` &rarr; `원격 주행` &rarr; `충전 시작`
+
+이러한 조건들을 화면 컴포넌트 내부에 단순 조건문으로 녹여내려 하자 다음과 같은 스파게티 코드가 작성되기 시작했습니다.
 
 ```javascript
-// 🍝 차종과 상태가 늘어날수록 컴포넌트가 비대해지고 버그가 생기기 쉬운 구조
-function ReservationActionButtons({ reservation }) {
-  const { status, carModel } = reservation;
+// 🍝 주행 방식과 충전사가 늘어날수록 UI 컴포넌트가 비대해지는 위험한 구조
+function TrailerActionButtons({ trailer, cpoType, driveType }) {
+  const { status } = trailer;
 
-  const handleAction = () => {
-    if (status === "PENDING") {
-      if (carModel === "Model_A") {
-        // Model_A 전용 사전 검사 API 호출
-      } else if (carModel === "Model_C") {
-        // Model_C 전용 안전 센서 승인 요청 API 호출
-      } else {
-        // 일반 예약 승인 및 배정 API 호출
-      }
-    } else if (status === "ASSIGNED") {
-      if (carModel === "Model_B") {
-        // 바로 충전 개시 API 호출
-      } else {
-        // 일반 트레일러 이동 명령 API 호출
-      }
+  const handleAction = (actionType) => {
+    if (driveType === "AUTONOMOUS" && cpoType === "A_CPO") {
+      if (status === "PENDING") callAutoDriveStartApi();
+      else if (status === "ARRIVED") callAutoConnectApi();
+    } else if (driveType === "MANUAL" && cpoType === "B_CPO") {
+      if (status === "PENDING") callManualMoveConfirmApi();
+      else if (status === "ARRIVED") callCpoAuthApi();
     }
-    // ... 하단으로 이어지는 수많은 중첩 if-else 분기
+    // ... 주행 방식과 충전기가 늘어날 때마다 수십 줄의 조건문 추가
   };
 
   return (
     <div className="button-group">
-      {status === "PENDING" && (
-        <button onClick={handleAction}>
-          {carModel === "Model_A"
-            ? "사전검사 신청"
-            : carModel === "Model_C"
-              ? "안전 센서 승인요청"
-              : "예약 승인"}
+      {driveType === "AUTONOMOUS" && status === "PENDING" && (
+        <button onClick={() => handleAction("AUTO_START")}>
+          자율주행 출발
         </button>
       )}
-      {status === "ASSIGNED" && (
-        <button onClick={handleAction}>
-          {carModel === "Model_B" ? "충전 개시" : "트레일러 이동"}
+      {driveType === "MANUAL" && status === "PENDING" && (
+        <button onClick={() => handleAction("MANUAL_CONFIRM")}>
+          수동 이동 완료
         </button>
       )}
     </div>
@@ -72,132 +59,109 @@ function ReservationActionButtons({ reservation }) {
 }
 ```
 
-지원하는 모델의 종류가 늘어날 때마다 `ReservationActionButtons` 컴포넌트의 안쪽 코드뿐만 아니라 클릭 이벤트 핸들러(`handleAction`)의 수십 줄에 달하는 if-else문을 매번 직접 뜯어고쳐야 했습니다. 이는 코드를 읽기 어렵게 만들었을 뿐만 아니라, 엉뚱한 차종에서 잘못된 버튼이 노출되는 등의 배포 후 버그로 직결되었습니다.
+지원하는 트레일러 주행 모드나 충전기가 늘어날 때마다 프론트엔드 개발자가 매번 컴포넌트 안쪽의 복잡한 중첩 조건문을 고쳐야 했고, 엉뚱한 주행 모드에서 잘못된 버튼이 렌더링되는 버그로 이어졌습니다.
 
 ---
 
-### 해결책: FSM(유한 상태 머신) 기반의 설정 분리
+### 해결책: 백엔드 API 인덱스 플래그 규약 제안
 
-이 문제를 해결하기 위해, 컴포넌트가 직접 어떤 버튼을 그릴지 복잡하게 연산하지 않고 **"현재 차종 모델과 예약 상태를 키값으로 주면, 노출할 버튼 목록과 그에 따른 행동 명세(API)를 즉시 반환해 주는 상태 머신 테이블"**을 구성하기로 했습니다.
+이 문제를 근본적으로 해결하기 위해, 프론트엔드가 트레일러의 세부 비즈니스 로직(주행방식, 충전기 종류)을 알 필요가 없도록 백엔드 팀에 "상태 및 액션 인덱스 플래그 인터페이스"를 제안했습니다.
 
-#### FSM 전이 및 액션 구조 정의
+#### 💡 제안한 API 인터페이스 구조
 
-```mermaid
-stateDiagram-v2
-    state "Model A (사전검증 필수)" as ModelA {
-        PENDING --> CHECKED : 사전검사 신청 (PRE_CHECK)
-        CHECKED --> ASSIGNED : 트레일러 배정 (ASSIGN)
-    }
+백엔드가 현재 트레일러의 상태 정보와 함께 **"수행 가능한 액션 식별 인덱스(actionIndex)"** 및 **"활성화 여부(enabled: 0/1)"** 플래그 배열을 프론트엔드에 전달하도록 규약을 정하였습니다.
 
-    state "Model B (즉시 배정)" as ModelB {
-        PENDING_B --> ASSIGNED_B : 즉시 배정 (ASSIGN)
-    }
-
-    note right of ModelA : 모델별로 상태 규칙과<br/>이동 경로가 다름
+```json
+{
+  "trailerId": "TR_104",
+  "currentState": "MOVING",
+  "currentStateName": "이동 중",
+  "availableActions": [
+    { "actionIndex": 1, "enabled": 1 },
+    { "actionIndex": 2, "enabled": 0 }
+  ]
+}
 ```
 
-각 모델이 어떤 상태를 가질 수 있고, 그 상태에서 어떤 이벤트가 발생했을 때 다음 상태(`next`)로 가는지, 화면상 버튼의 라벨(`label`)은 무엇인지, 그리고 호출할 API(`api`)는 무엇인지를 한곳에 모아 명세화했습니다.
-
 ---
 
-### 상태 머신을 적용한 코드 리팩토링
+### 리팩토링 후 프론트엔드 코드: 인덱스 기반 UI 매핑 (ACTION_UI_MAP)
 
-#### 1. FSM 설정 테이블 구축 (`reservationFsm.ts`)
+프론트엔드 컴포넌트는 더 이상 주행 방식이나 충전사의 종류에 따른 복잡한 `if-else` 분기문을 가지지 않습니다.
 
-```javascript
-// 🟢 차량 모델별 예약 상태 전이 및 액션 정의
-export const RESERVATION_FSM = {
-  Model_A: {
-    PENDING: {
-      PRE_CHECK: {
-        next: "CHECKED",
-        label: "사전검사 신청",
-        api: api.requestPreCheck,
-      },
-    },
-    CHECKED: {
-      ASSIGN: {
-        next: "ASSIGNED",
-        label: "트레일러 배정",
-        api: api.assignTrailer,
-      },
-    },
-    ASSIGNED: {
-      START_CHARGE: {
-        next: "CHARGING",
-        label: "충전 시작",
-        api: api.startCharge,
-      },
-    },
-  },
-  Model_B: {
-    // Model_B는 사전 검증 없이 바로 배정으로 전이
-    PENDING: {
-      ASSIGN: { next: "ASSIGNED", label: "즉시 배정", api: api.assignTrailer },
-    },
-    ASSIGNED: {
-      START_CHARGE: {
-        next: "CHARGING",
-        label: "충전 시작",
-        api: api.startCharge,
-      },
-    },
-  },
-  Default: {
-    PENDING: {
-      ASSIGN: { next: "ASSIGNED", label: "예약 승인", api: api.assignTrailer },
-    },
-  },
+대신 **인덱스별 UI 속성 매핑 딕셔너리(`ACTION_UI_MAP`)**를 관리하여, 백엔드가 내려준 `actionIndex`에 맞게 라벨과 버튼 스타일을 매칭시켜 출력하고, 클릭 시 해당 `actionIndex`를 백엔드로 전달하는 단순한 구조가 되었습니다.
+
+```tsx
+// 🟢 프론트엔드가 관리하는 액션 인덱스별 UI 매핑 객체(예시)
+const ACTION_UI_MAP: Record<
+  number,
+  { label: string; variant: "primary" | "secondary" }
+> = {
+  1: { label: "자율주행 출발", variant: "primary" },
+  2: { label: "수동 이동 완료", variant: "secondary" },
+  3: { label: "충전사 회원 인증", variant: "primary" },
+  4: { label: "원격 제어 연결", variant: "primary" },
+};
+
+interface ActionItem {
+  actionIndex: number;
+  enabled: number;
+}
+
+interface Props {
+  trailerId: string;
+  availableActions: ActionItem[];
+  onExecuteAction: (trailerId: string, actionIndex: number) => void;
+}
+
+export function TrailerActionButtons({
+  trailerId,
+  availableActions,
+  onExecuteAction,
+}: Props) {
+  return (
+    <div className="action-buttons-group">
+      {availableActions.map(({ actionIndex, enabled }) => {
+        // 인덱스에 해당하는 UI 정보 매핑
+        const uiConfig = ACTION_UI_MAP[actionIndex] || {
+          label: "알 수 없는 액션",
+          variant: "secondary",
+        };
+
+        return (
+          <button
+            key={actionIndex}
+            disabled={enabled === 0}
+            className={`btn-${uiConfig.variant}`}
+            onClick={() => onExecuteAction(trailerId, actionIndex)}
+          >
+            {uiConfig.label}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+```
+
+#### 액션 실행 핸들러 (Index 전달)
+
+```typescript
+// 유저가 버튼을 누르면 인덱스만 백엔드로 전송
+const handleExecuteAction = async (trailerId: string, actionIndex: number) => {
+  try {
+    await api.post(`/api/trailers/${trailerId}/action`, { actionIndex });
+    toast.success("명령이 성공적으로 전달되었습니다.");
+  } catch (error) {
+    toast.error("명령 수행에 실패했습니다.");
+  }
 };
 ```
 
-#### 2. 컴포넌트 리팩토링 (`ReservationActionButtons.tsx`)
-
-FSM 설정 덕분에 컴포넌트는 차종이나 상태가 백 개로 늘어나더라도 단 한 줄의 조건문도 없이 동적이고 견고하게 동작하는 코드로 탈바꿈했습니다.
-
-```javascript
-import { RESERVATION_FSM } from "./reservationFsm";
-
-function ReservationActionButtons({ reservation, onUpdate }) {
-  const { id, status, carModel } = reservation;
-
-  // 1. 해당 차량 모델 및 현재 예약 상태에 맞는 가용 액션 규칙 조회
-  const modelRules = RESERVATION_FSM[carModel] || RESERVATION_FSM["Default"];
-  const allowedActions = modelRules[status] || {}; // 예: { PRE_CHECK: { next: 'CHECKED', label: '사전검사 신청', api: ... } }
-
-  return (
-    <div className="action-buttons-group">
-      {/* 2. 조건문 없이 허용된 액션 배열을 순회하여 버튼을 동적으로 렌더링 */}
-      {Object.entries(allowedActions).map(([actionKey, actionSpec]) => (
-        <button
-          key={actionKey}
-          className={`btn-${actionKey.toLowerCase()}`}
-          onClick={async () => {
-            try {
-              // 3. 약속된 API 동작 호출
-              await actionSpec.api(id);
-              // 4. API 성공 시 다음 상태값(next)으로 예약 상태 업데이트
-              onUpdate(actionSpec.next);
-            } catch (err) {
-              alert("액션 수행 중 오류가 발생했습니다.");
-            }
-          }}
-        >
-          {actionSpec.label}
-        </button>
-      ))}
-    </div>
-  );
-}
-```
-
 ---
 
-### FSM 도입이 가져다준 성과
+### 성과 및 배운 점
 
-1. **컴포넌트 렌더링 로직의 단순화**
-   - 컴포넌트 내부에서 if-else 분기가 100% 제거되었으며, 단지 FSM 테이블의 출력 결과를 받아 그대로 맵핑하여 렌더링하는 역할로 단순해졌습니다.
-2. **비즈니스 정책과 UI의 격리**
-   - "이 차종은 사전 검증을 거쳐야 배정된다"라는 엄격한 비즈니스 규칙이 코드 깊숙한 곳의 렌더링 로직이 아닌 `reservationFsm.ts`라는 설정 파일에 깔끔하게 격리되었습니다.
-3. **확장성 (신규 차종 대응)**
-   - 나중에 새로운 타입의 차량이나 특수한 프로세스를 가진 차종이 추가되더라도, 공통 UI 코드인 `ReservationActionButtons.tsx`는 단 한 자도 건드리지 않고 `reservationFsm.ts` 파일에 새로운 객체 하나만 정의해 줌으로써 완벽히 대응할 수 있게 되었습니다.
+1. **복잡한 비즈니스 조건문 100% 제거**: UI 컴포넌트 내부의 중첩된 `if-else` 분기문을 전면 제거하고, 단순 $O(1)$ 인덱스 UI 매핑 딕셔너리(`ACTION_UI_MAP`) 구조로 정돈했습니다.
+2. **유지보수성 및 확장성 향상**: 신규 주행 방식이나 액션이 추가되어도 컴포넌트의 렌더링/이벤트 로직을 고칠 필요 없이 `ACTION_UI_MAP`에 인덱스 키와 라벨만 추가해 주면 즉시 대응 가능한 정갈한 구조를 확립했습니다.
+3. **주도적인 백엔드 협업 경험**: 프론트엔드 개발자가 단순 화면 구현을 넘어, API 데이터 인터페이스 구조를 선제 제안하여 전체 아키텍처의 생산성을 높일 수 있음을 배운 귀중한 경험이었습니다.

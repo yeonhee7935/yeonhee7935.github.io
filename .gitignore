@@ -1,5 +1,8 @@
+docs/
 .DS_Store
 *.log
 .gemini/
 .jekyll-cache/
 _site/
+docs/
+generate-pdf.js
