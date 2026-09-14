@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initTypewriter();
   initSmoothScrolling();
   initGlossaryModal();
+  initMultipleDownloads();
 });
 
 /**
@@ -465,6 +466,44 @@ function initGlossaryModal() {
     if (e.key === 'Escape' && modal.classList.contains('active')) {
       closeGlossary();
     }
+  });
+}
+
+/**
+ * 11. Multiple Downloads (Downloads both resume and portfolio PDFs)
+ * Automatically triggers download of portfolio.pdf when user downloads resume.pdf
+ */
+function initMultipleDownloads() {
+  const downloadLinks = document.querySelectorAll('a[href*="resume.pdf"]');
+  
+  downloadLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+      // Prevent standard direct navigation/download
+      e.preventDefault();
+      
+      const href = link.getAttribute('href');
+      const resumeUrl = href;
+      const portfolioUrl = href.replace('resume.pdf', 'portfolio.pdf');
+      
+      // Helper function to trigger a single download programmatically
+      const triggerDownload = (url, fallbackName) => {
+        const tempLink = document.createElement('a');
+        tempLink.href = url;
+        tempLink.download = fallbackName || url.substring(url.lastIndexOf('/') + 1);
+        tempLink.style.display = 'none';
+        document.body.appendChild(tempLink);
+        tempLink.click();
+        document.body.removeChild(tempLink);
+      };
+      
+      // 1. Download Resume
+      triggerDownload(resumeUrl, '이력서_정연희.pdf');
+      
+      // 2. Download Portfolio after a short delay (300ms) to bypass browser duplicate download blocking
+      setTimeout(() => {
+        triggerDownload(portfolioUrl, '포트폴리오_정연희.pdf');
+      }, 300);
+    });
   });
 }
 
