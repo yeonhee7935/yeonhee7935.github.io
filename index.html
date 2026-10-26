@@ -425,9 +425,146 @@ description: 프론트엔드 개발자 정연희입니다.
     </p>
 
     <div class="accordion-group">
-      <!-- Project 1 (Space Reservation) -->
+      <!-- Project 1 (Broadcast Team Scheduler) -->
       <details class="project-details reveal" name="project-accordion">
         <summary class="project-summary" id="project-1-summary">
+          <div class="project-summary-header">
+            <h3 class="project-title">근무표 자동 편성 서비스</h3>
+            <div class="project-meta">개인 프로젝트 · 2026.10 ~ 운영 중</div>
+          </div>
+          <div class="project-arrow">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              class="arrow-icon"
+            >
+              <path
+                d="M6 9L12 15L18 9"
+                stroke="#8B95A1"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </div>
+        </summary>
+        <div class="details-content-wrapper">
+          <div class="details-inner-content">
+            <div class="tech-stack-container">
+              <span class="tech-badge">TypeScript</span>
+              <span class="tech-badge">Next.js 15 (App Router)</span>
+              <span class="tech-badge">React 19</span>
+              <span class="tech-badge">Vitest</span>
+              <span class="tech-badge">Playwright</span>
+              <span class="tech-badge">Tailwind CSS v4</span>
+              <span class="tech-badge secondary">Drizzle ORM</span>
+              <span class="tech-badge secondary">Neon Postgres</span>
+              <span class="tech-badge secondary">Vercel</span>
+            </div>
+
+            <div class="project-team-meta">
+              <div class="team-meta-item">
+                <span class="meta-label">팀 구성</span>
+                <span class="meta-val"
+                  ><strong class="text-blue"
+                    >개인 프로젝트 (1인 개발)</strong
+                  ></span
+                >
+              </div>
+              <div class="team-meta-item">
+                <span class="meta-label">담당 역할</span>
+                <span class="meta-val"
+                  >1인 개발 (기획, 디자인, FE/BE 개발, 운영)</span
+                >
+              </div>
+            </div>
+
+            <div class="project-body">
+              <div class="project-block">
+                <h4 class="block-title">개요</h4>
+                <p>
+                  카카오톡으로 일정을 받아 수작업으로 짜던 월간 근무
+                  편성을 웹 서비스로 전환하여, 회원 일정 입력부터 편성표 자동
+                  생성까지 처리하는 모바일 중심 웹 애플리케이션.
+                </p>
+              </div>
+              <div class="project-block">
+                <h4 class="block-title">주요 작업</h4>
+                <ul class="process-list">
+                  <li
+                    data-category="backend"
+                    data-tech="typescript vitest"
+                  >
+                    <span class="project-tag tag-backend">Algorithm</span>
+                    <strong>개인·소속 일정을 반영한 근무 편성 자동화</strong>
+                    <p>
+                      카카오톡으로 수집한 개인 일정과 소속 부서 일정을 관리자가
+                      직접 대조하며 근무를 배치해 월간 편성에 2주 이상 걸리는
+                      문제를 해결하고자, 근무 불가 일정을 제외하고 특정 인원에게
+                      근무가 몰리지 않도록 배정 횟수를 고르게 분배하는 자동편성
+                      알고리즘을 설계했습니다. DB와 분리된 순수 함수로 구현해
+                      Vitest로 조건 위반 여부를 검증했습니다.
+                    </p>
+                  </li>
+                  <li
+                    data-category="frontend"
+                    data-tech="nextjs react typescript"
+                  >
+                    <span class="project-tag tag-frontend">Frontend</span>
+                    <strong>회원 직접 일정 입력 및 소속 일정 자동 반영</strong>
+                    <p>
+                      모바일 일정 입력 화면을 구현하고, 소속 일정에 해당하는
+                      근무를 '불가'로 자동 기입하며 요일 반복 입력 및 제출 현황
+                      확인 기능을 제공해 카카오톡 개별 수집·취합 과정을
+                      대체했습니다.
+                    </p>
+                  </li>
+                  <li
+                    data-category="frontend"
+                    data-tech="react typescript"
+                  >
+                    <span class="project-tag tag-frontend">UX</span>
+                    <strong>모바일 일정 입력 흐름 단순화 및 온보딩 가이드</strong>
+                    <p>
+                      직접 사용하며 조작 요소가 많아 입력이 직관적이지 않다는
+                      점을 발견하고, 여러 입력 방식을 비교·검토해 칸을 누르는
+                      기본 조작만 남기고 세부 설정은 상세 창 하나로
+                      통합했습니다. 첫 방문 시 실제 화면 요소를 차례로 강조하는
+                      단계별 온보딩 가이드도 구현했습니다.
+                    </p>
+                  </li>
+                </ul>
+              </div>
+              <div class="project-block">
+                <h4 class="block-title">성과</h4>
+                <ul class="achievement-list">
+                  <li>
+                    100명 규모의 월간 편성 소요 시간 단축 (<strong
+                      >2주 이상 → 클릭 한 번, 1초 이내</strong
+                    >)
+                  </li>
+                  <li>회원 100명이 직접 일정을 입력해 관리자의 수집·취합 작업 제거</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="project-image-container">
+              <img
+                src="assets/project-schedule.png"
+                alt="모바일 일정 입력 화면의 단계별 온보딩 가이드"
+                class="project-image"
+              />
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <!-- Project 2 (Space Reservation) -->
+      <details class="project-details reveal" name="project-accordion">
+        <summary class="project-summary" id="project-2-summary">
           <div class="project-summary-header">
             <h3 class="project-title">공간 예약 서비스</h3>
             <div class="project-meta">개인 프로젝트 · 2026.05 ~ 2026.06</div>
@@ -569,9 +706,9 @@ description: 프론트엔드 개발자 정연희입니다.
         </div>
       </details>
 
-      <!-- Project 2 (Autonomy Studio) -->
+      <!-- Project 3 (Autonomy Studio) -->
       <details class="project-details reveal" name="project-accordion">
-        <summary class="project-summary" id="project-2-summary">
+        <summary class="project-summary" id="project-3-summary">
           <div class="project-summary-header">
             <h3 class="project-title">오토노미 스튜디오</h3>
             <div class="project-meta">(주)퓨처드라이브 · 2023.01 ~ 2024.12</div>
@@ -728,9 +865,9 @@ description: 프론트엔드 개발자 정연희입니다.
         </div>
       </details>
 
-      <!-- Project 3 (FMS) -->
+      <!-- Project 4 (FMS) -->
       <details class="project-details reveal" name="project-accordion">
-        <summary class="project-summary" id="project-3-summary">
+        <summary class="project-summary" id="project-4-summary">
           <div class="project-summary-header">
             <h3 class="project-title">충전 트레일러 관제 서비스 (FMS)</h3>
             <div class="project-meta">(주)퓨처드라이브 · 2025.01 ~ 2025.12</div>
@@ -878,9 +1015,9 @@ description: 프론트엔드 개발자 정연희입니다.
         </div>
       </details>
 
-      <!-- Project 4 (WebRTC Remote Control) -->
+      <!-- Project 5 (WebRTC Remote Control) -->
       <details class="project-details reveal" name="project-accordion">
-        <summary class="project-summary" id="project-4-summary">
+        <summary class="project-summary" id="project-5-summary">
           <div class="project-summary-header">
             <h3 class="project-title">차량용 원격데스크톱 솔루션</h3>
             <div class="project-meta">(주)퓨처드라이브 · 2024.01 ~ 2024.12</div>
